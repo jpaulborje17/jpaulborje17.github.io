@@ -1,4 +1,4 @@
-console.log("update 14");
+console.log("update 15");
 
 (function ($, window, document, undefined) {
 
@@ -280,7 +280,7 @@ console.log("update 14");
   var ezcommButtonVar = setInterval(addEzcommCoreLauncherGPPPayment, 2000);
 
   function addEzcommCoreLauncherGPPPayment() {
-        if (window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("span:contains('None of the cases found are related to the current inquiry')").length > 0) &&
+        if (window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("span:contains('None of the cases found are related to the current inquiry')").length > 0 &&
             window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("#gpppaymentheader").length === 0) {
                  $('#RULE_KEY > div:nth-child(1) > div > div > div > div > p').append('<div style="margin-bottom:10px"><button id="gpppaymentheader">Click Me</button></div>');
                 //clearInterval(ezcommButtonVar); ToDo-Harish: look for better solution to clear interval or slow process if possible
