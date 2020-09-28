@@ -271,11 +271,17 @@ console.log("update 16");
 
     }
 
-    document.getElementById('gpppaymentheader').addEventListener('click', function(){
-        this.config.data.member = getMemberDataMandR();
-        this.config.data.request_metadata = getRequestMetadata();
-        this.config.data.message = messagesMandR();
-        ezcommCore.app.open(this.config);
+    window.parent.document.getElementById('gpppaymentheader').addEventListener('click', function(){
+
+        var config = {
+            data: {
+                member: getMemberDataMandR(),
+                request_metadata: getRequestMetadata(),
+                message: messagesMandR()
+            }
+        }
+    
+        ezcommCore.app.open(config);
     });
 
 
