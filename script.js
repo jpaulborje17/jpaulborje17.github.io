@@ -1,14 +1,11 @@
-console.log("update 15");
+console.log("update 16");
 
 (function ($, window, document, undefined) {
 
     'use strict';
     // Get member sessionStorage from maestro
     var member_dataSession = JSON.parse(window.parent.sessionStorage.getItem("member_info"));
-    var houseHoldNum;
-    var ezcommCommunications;
     var pageUrl = document.forms[0].elements["TaskSectionReference"].value;
-    var reset = false;
     var householdIdSched;
 
     var activeTier1IframeId = window.parent.$('div[id^="PegaWebGadget"]').filter(
@@ -19,7 +16,7 @@ console.log("update 15");
     }).contents()[0].id;
 
     function isAutodocMnrNotEmpty() {
-        if (sessionStorage.getItem('autodocmnrgpp') !== null && sessionStorage.getItem('QuestionRadioStatusAppt') !== 'OPT_IN') {
+        if (sessionStorage.getItem('autodocmnrgpp') !== null) {
             window.parent.sessionStorage.removeItem('autodocmnrgpp');
             window.parent.sessionStorage.removeItem('messageSuccess');
 
@@ -27,7 +24,7 @@ console.log("update 15");
                 sessionStorage.removeItem('optoutappt');
             }
 
-        } else if(sessionStorage.getItem('autodocmnrgpp') === null && sessionStorage.getItem('QuestionRadioStatusAppt') !== 'OPT_IN') {
+        } else if(sessionStorage.getItem('autodocmnrgpp') === null) {
             window.parent.sessionStorage.removeItem('autodocmnrgpp');
             window.parent.sessionStorage.removeItem('messageSuccess');
 
@@ -39,7 +36,7 @@ console.log("update 15");
     }
 
     function checkIfReset(){
-        if(sessionStorage.getItem('autodocmnrgpp') !== null && sessionStorage.getItem('QuestionRadioStatusAppt') === 'OPT_IN') {
+        if(sessionStorage.getItem('autodocmnrgpp') !== null) {
             window.parent.sessionStorage.removeItem('autodocmnrgpp');
             window.parent.sessionStorage.removeItem('messageSuccess');
             reset = true;
@@ -47,7 +44,7 @@ console.log("update 15");
     }
 
     //TODO: remove?
-    if (pageUrl == "ScheduleAppointment") {
+    if (pageUrl == "MakeAPayment_GPSCC") {
         isAutodocMnrNotEmpty();
     }
 
@@ -55,8 +52,6 @@ console.log("update 15");
         var appWindow = window.parent.open("/a4me/ezcomm-core-v2/", "a4meEZCommWindow", 'location=no,height=600,width=1000,scrollbars=1');
         isAutodocMnrNotEmpty();
         checkIfReset();
-        var detail = '';
-
 
         var configappt = false;
         var myObj = requestMetaDataMandRAppt().plugins;
@@ -67,12 +62,9 @@ console.log("update 15");
             }
         });
 
-
         var loop = setInterval(function () {
             if (appWindow.closed) {
                 if (sessionStorage.getItem('messageSuccess') === null && configappt) {
-                    window.parent.sessionStorage.removeItem("QuestionRadioStatusAppt");
-                    document.getElementById('ezcomm-mnr-mail-question-yes').checked = false;
                     window.parent.sessionStorage.removeItem("autodocmnrgpp");
                 }
 
@@ -98,7 +90,7 @@ console.log("update 15");
         ezcommMandRMemObj.policyId = "0";
         ezcommMandRMemObj.encryptedFlag = false;
         ezcommMandRMemObj.additionalIdentifiers = [{
-            id: getHouseHoldIdAppt(),
+            id: "",
             type: "GPSHID"
         }];
         return ezcommMandRMemObj;
@@ -156,12 +148,12 @@ console.log("update 15");
 
         objprov1.type = "EMAIL";
         objprov1.campaignId = 68;
-        objprov1.template_name = "Provider_Appt_Info_EMAIL";
+        objprov1.template_name = "Provider_Appt_Info_EMAIL"; // TODO: Change template name
         objprov1.msg_parameters = [];
 
         objprov2.type = "SMS";
         objprov2.campaignId = 68;
-        objprov2.template_name = "Provider_Appt_Info_SMS";
+        objprov2.template_name = "Provider_Appt_Info_SMS"; // TODO: Change template name
         objprov2.msg_parameters = [];
 
         filtersObject.push(objprov1);
@@ -174,7 +166,7 @@ console.log("update 15");
     if (document.forms[0].elements["TaskSectionReference"].value == "Tier1CompletionDetails") {
 
         //TODO: ADD OPT_IN MESSAGE HERE..s
-        if(sessionStorage.getItem('campaignName') === "AppointmentSched") { // TODO: change URL PAYMENT HEADER
+        if(sessionStorage.getItem('campaignName') === "MakeAPayment_GPSCC") { // TODO: change URL PAYMENT HEADER
 
             var configuration = false;
             var myObj = requestMetaDataMandRAppt().plugins;
@@ -204,6 +196,18 @@ console.log("update 15");
             window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find('#Comments').val(providerTierNotes);
         }
     }
+
+    var ezcommCommunications = {
+        
+        openApp: function () {
+            this.config.data.member = getMemberDataMandR();
+            this.config.data.request_metadata = getRequestMetadata();
+            this.config.data.message = messagesMandR();
+            ezcommCore.app.open(this.config);
+        }
+
+    };
+
 
     var ezcommCore = {
         app: {
@@ -282,7 +286,7 @@ console.log("update 15");
   function addEzcommCoreLauncherGPPPayment() {
         if (window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("span:contains('None of the cases found are related to the current inquiry')").length > 0 &&
             window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("#gpppaymentheader").length === 0) {
-                 $('#RULE_KEY > div:nth-child(1) > div > div > div > div > p').append('<div style="margin-bottom:10px"><button id="gpppaymentheader">Click Me</button></div>');
+                 $('#RULE_KEY > div:nth-child(1) > div > div > div > div > p').append('<div style="margin-bottom:10px"><button onclick="window.parent.ezcommCommunications.openApp()" id="gpppaymentheader">Click Me</button></div>');
                 //clearInterval(ezcommButtonVar); ToDo-Harish: look for better solution to clear interval or slow process if possible
         }
 
