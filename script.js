@@ -197,16 +197,13 @@ console.log("update 16");
         }
     }
 
-    var ezcommCommunications = {
-        
-        openApp: function () {
-            this.config.data.member = getMemberDataMandR();
+    function ezCommu(e) {
+        e.preventDefault();
+        this.config.data.member = getMemberDataMandR();
             this.config.data.request_metadata = getRequestMetadata();
             this.config.data.message = messagesMandR();
             ezcommCore.app.open(this.config);
-        }
-
-    };
+    }
 
 
     var ezcommCore = {
@@ -286,7 +283,7 @@ console.log("update 16");
   function addEzcommCoreLauncherGPPPayment() {
         if (window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("span:contains('None of the cases found are related to the current inquiry')").length > 0 &&
             window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("#gpppaymentheader").length === 0) {
-                 $('#RULE_KEY > div:nth-child(1) > div > div > div > div > p').append('<div style="margin-bottom:10px"><button onclick="window.parent.ezcommCommunications.openApp()" id="gpppaymentheader">Click Me</button></div>');
+                 $('#RULE_KEY > div:nth-child(1) > div > div > div > div > p').append('<div style="margin-bottom:10px"><button onclick="window.parent.ezCommu(e)" id="gpppaymentheader">Click Me</button></div>');
                 //clearInterval(ezcommButtonVar); ToDo-Harish: look for better solution to clear interval or slow process if possible
         }
 
