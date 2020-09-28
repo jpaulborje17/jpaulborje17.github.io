@@ -15,6 +15,8 @@ console.log("update 16");
         return $(this).attr('aria-hidden') === "false";
     }).contents()[0].id;
 
+    var ezcommButtonVar = setInterval(addEzcommCoreLauncherGPPPayment, 1500);
+
     function isAutodocMnrNotEmpty() {
         if (sessionStorage.getItem('autodocmnrgpp') !== null) {
             window.parent.sessionStorage.removeItem('autodocmnrgpp');
@@ -197,8 +199,7 @@ console.log("update 16");
         }
     }
 
-    function ezCommu(e) {
-        e.preventDefault();
+    function ezCommu() {
         this.config.data.member = getMemberDataMandR();
             this.config.data.request_metadata = getRequestMetadata();
             this.config.data.message = messagesMandR();
@@ -278,12 +279,11 @@ console.log("update 16");
     }
 
 
-  var ezcommButtonVar = setInterval(addEzcommCoreLauncherGPPPayment, 2000);
 
   function addEzcommCoreLauncherGPPPayment() {
         if (window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("span:contains('None of the cases found are related to the current inquiry')").length > 0 &&
             window.parent.$('iframe[id=' + activeTier1IframeId + ']').contents().find("#gpppaymentheader").length === 0) {
-                 $('#RULE_KEY > div:nth-child(1) > div > div > div > div > p').append('<div style="margin-bottom:10px"><button onclick="window.parent.ezCommu(e)" id="gpppaymentheader">Click Me</button></div>');
+                 $('#RULE_KEY > div:nth-child(1) > div > div > div > div > p').append('<div style="margin-bottom:10px"><button onclick="window.parent.ezCommu()" type="button" id="gpppaymentheader"><div class="pzbtn-rnd" ><div class="pzbtn-lft"><div class="pzbtn-rgt" ><div class="pzbtn-mid" ><img src="webwb/zblankimage.gif" alt="" class="pzbtn-i" onclick="ezCommu()">EZComm</div></div></div></div></button></div>');
                 //clearInterval(ezcommButtonVar); ToDo-Harish: look for better solution to clear interval or slow process if possible
         }
 
