@@ -199,7 +199,7 @@ console.log("update 16");
         }
     }
 
-    window.parent.ezCommu() = function {
+    window.parent.ezCommu() = function() {
         this.config.data.member = getMemberDataMandR();
             this.config.data.request_metadata = getRequestMetadata();
             this.config.data.message = messagesMandR();
